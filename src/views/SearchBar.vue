@@ -35,7 +35,7 @@ function resetForm() {
 }
 
 async function search() {
-  console.log('Searching...');
+  console.log('Searching');
 
   let requestUrl = `${url}?`;
 
@@ -102,7 +102,7 @@ function viewUserDetails(userId, userName) {
     <form @submit.prevent="search" class="search-form">
       <h1>Search Users</h1>
 
-      <!-- Radio buttons for selecting search field (only one can be selected) -->
+   
       <h4>SEARCH BY:</h4>
       <div class="search-field">
         <label>
@@ -116,7 +116,7 @@ function viewUserDetails(userId, userName) {
         </label>
       </div>
 
-      <!-- Show the text input based on the selected radio button -->
+ 
       <div class="search-field" v-if="selectedField">
         <input
           type="text"
@@ -126,7 +126,7 @@ function viewUserDetails(userId, userName) {
         />
       </div>
 
-      <!-- Sort by Asc/Desc -->
+   
       <div class="sort-fields">
         <h4>SORT BY:</h4>
         <div class="sort-options">
@@ -139,7 +139,7 @@ function viewUserDetails(userId, userName) {
         </div>
       </div>
 
-      <!-- Pagination Inputs -->
+  
       <div class="pagination-fields">
         <h4>SKIP:</h4>
         <input
