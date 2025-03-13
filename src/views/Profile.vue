@@ -4,10 +4,15 @@ import { ref, useTemplateRef } from 'vue'
 import Toast from '@/components/Toast.vue';
 import Modal from '@/components/Modal.vue';
 import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore()
+const {token} = storeToRefs(userStore)
 
 const router = useRouter();
 
-const token = localStorage.getItem('token');
+//const token = localStorage.getItem('token');
 
 const username = ref('');
 const firstname = ref('');
@@ -23,7 +28,7 @@ const fetchData = async () => {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${token.value}`
             },
         });
 
@@ -67,7 +72,7 @@ async function editProfile(e) {
     const options = {
         method: "PATCH",
         headers: {
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${token.value}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify(userData)
@@ -79,10 +84,20 @@ async function editProfile(e) {
         if (response.ok) {
             message.value = 'Profile Updated!';
             
-            localStorage.setItem('username', userData.userName);
-            localStorage.setItem('firstName', userData.firstName);
-            localStorage.setItem('lastName', userData.lastName);
-            localStorage.setItem('email', userData.email);
+            //localStorage.setItem('username', userData.userName);
+            //localStorage.setItem('firstName', userData.firstName);
+            //localStorage.setItem('lastName', userData.lastName);
+            //localStorage.setItem('email', userData.email);
+
+
+            userStore.$patch((state) => {
+                   state.firstName =  userData.firstName
+                   state.lastName = userData.lastName
+                   state.userName = userData.userName
+                   state.email = userData.email
+            })
+	
+            console.log(userStore)
 
             username.value = userData.userName;
             firstname.value = userData.firstName;

@@ -1,13 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import Toast from '@/components/Toast.vue';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore()
+const {token} = storeToRefs(userStore)
 
 const url = 'https://hap-app-api.azurewebsites.net/message'
 
 const thought = ref()
 const message = ref('')
 
-const token = localStorage.getItem('token');
+//const token = localStorage.getItem('token');
 
 
 async function sendMessage(){
@@ -18,7 +23,7 @@ const options = {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${token}`,
+    "Authorization": `Bearer ${token.value}`,
   },
   body: JSON.stringify({text: thought.value}),
 }

@@ -2,6 +2,11 @@
 import { ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router'; 
 import User from '../components/User.vue'
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore()
+const { token} = storeToRefs(userStore)
 
 const url = 'https://hap-app-api.azurewebsites.net/users';
 
@@ -12,7 +17,7 @@ const skip = ref('');
 const limit = ref('5'); 
 const users = ref([]); 
 const message = ref(''); 
-const token = localStorage.getItem('token'); 
+//const token = localStorage.getItem('token'); 
 
 const router = useRouter();
 const route = useRoute();
@@ -59,7 +64,7 @@ async function search() {
     requestUrl = requestUrl.slice(0, -1);
   }
 
-  if (!token) {
+  if (!token.value) {
     message.value = 'Something went wrong. Please try again!';
     return;
   }
@@ -68,7 +73,7 @@ async function search() {
     const response = await fetch(requestUrl, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token.value}`,
         'Content-Type': 'application/json',
       },
     });

@@ -2,6 +2,11 @@
 import { ref } from 'vue'
 import Header from '../components/Header.vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+
+const { setUser } = userStore
 
 const router = useRouter()
 
@@ -53,11 +58,14 @@ async function signIn(e) {
 		const firstname = user.firstName
 		const lastname = user.lastName
 		const email = user.email
+		const token = data.token
 
-		localStorage.setItem('username', username);
-		localStorage.setItem('firstname', firstname);
-		localStorage.setItem('lastname', lastname);
-		localStorage.setItem('email', email);
+		setUser(firstname, lastname, username, email, token)
+
+		//localStorage.setItem('username', username);
+		//localStorage.setItem('firstname', firstname);
+		//localStorage.setItem('lastname', lastname);
+		//localStorage.setItem('email', email);
 	
 
 		router.push(('/main'))

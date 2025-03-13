@@ -2,12 +2,17 @@
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useRouter} from 'vue-router'; 
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore()
+const { token} = storeToRefs(userStore)
 
 const route = useRoute();
 console.log(route.params)
 const userId = route.params.userId; 
 const userName = route.params.userName; 
-const token = localStorage.getItem('token'); 
+//const token = localStorage.getItem('token'); 
 const newMessage = ref(''); 
 const messageError = ref(''); 
 const router = useRouter();
@@ -19,7 +24,7 @@ async function sendMessage() {
       const response = await fetch(`https://hap-app-api.azurewebsites.net/message/${userId}`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.value}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ text: newMessage.value }),

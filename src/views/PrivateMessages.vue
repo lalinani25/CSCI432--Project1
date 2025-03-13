@@ -3,17 +3,22 @@ import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
 import { ref, onMounted, nextTick } from 'vue';
 import PrivateMessage from '@/components/PrivateMessage.vue';
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore()
+const {token} = storeToRefs(userStore)
 
 const router = useRouter();
 const route = useRoute();
-const token = localStorage.getItem('token');
+//const token = localStorage.getItem('token');
 const userId = route.params.userId;
 
 const items = ref([]);
 const firstFetchedDate = ref(null);
 const time = ref();
 const newMessagesCount = ref(0);
-let hasFetchedNewMessages = ref(false);
+
 
 const seenMessages = new Set();
 let isFetching = false; 
@@ -35,7 +40,7 @@ const fetchData = async (date) => {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        "Authorization": `Bearer ${token}`,
+        "Authorization": `Bearer ${token.value}`,
       },
     });
 
@@ -81,7 +86,7 @@ const loadNewMessages = async () => {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        "Authorization": `Bearer ${token}`,
+        "Authorization": `Bearer ${token.value}`,
       },
     });
 
@@ -130,7 +135,7 @@ const countNewMessages = async () => {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        "Authorization": `Bearer ${token}`,
+        "Authorization": `Bearer ${token.value}`,
       },
     });
 

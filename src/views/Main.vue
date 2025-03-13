@@ -1,20 +1,26 @@
 <script setup>
 import Header from '../components/Header.vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore()
+const {  username, token} = storeToRefs(userStore)
 
 const router = useRouter()
-const username = localStorage.getItem("username")
+//const username = localStorage.getItem("username")
+
 //Sign Out
 async function signOut(event) {
 
-	const token = localStorage.getItem("token")
+	//const token = localStorage.getItem("token")
 
 	const url = 'https://hap-app-api.azurewebsites.net/user/logout'
 
 	const options = {
 		method: "POST",
 		headers: {
-			Authorization: `Bearer ${token}`,
+			Authorization: `Bearer ${token.value}`,
 		},
 	}
 
@@ -22,9 +28,11 @@ async function signOut(event) {
 
 	if (response.ok) {
 		if (response.status === 200) {
-			localStorage.removeItem("token");
+			//localStorage.removeItem("token");
 
-			if (localStorage.removeItem("token") == null) {
+			userStore.$reset()
+
+			if (token.value == '') {
 				console.log("Token has been removed!")
 			}
 
@@ -53,13 +61,13 @@ async function Delete(event) {
 		return;
 	}
 	else if (confirm === true) {
-		const token = localStorage.getItem("token");
+		//const token = localStorage.getItem("token");
 
 		const url = 'https://hap-app-api.azurewebsites.net/user';
 		const options = {
 			method: "DELETE",
 			headers: {
-				"Authorization": `Bearer ${token}`
+				"Authorization": `Bearer ${token.value}`
 			},
 		};
 
@@ -67,15 +75,17 @@ async function Delete(event) {
 			let response = await fetch(url, options);
 			console.log(response)
 			if (response.ok && response.status === 200) {
-				localStorage.removeItem("token");
-				localStorage.removeItem("username");
+				//localStorage.removeItem("token");
+				//localStorage.removeItem("username");
+				userStore.$reset()
+
 				console.log(response)
 
-				if (localStorage.getItem("token") === null) {
+				if (token === '') {
 
 					console.log("Token has been removed!");
 				}
-				if (localStorage.getItem("username") === null) {
+				if (username === null) {
 
 					console.log("User has been removed!");
 				}

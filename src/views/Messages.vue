@@ -2,9 +2,15 @@
 import { useRouter } from 'vue-router'
 import { ref, onMounted, nextTick } from 'vue'
 import Message from '../components/Message.vue'
+import { storeToRefs } from 'pinia';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore()
+const {token} = storeToRefs(userStore)
 
 const router = useRouter()
-const token = localStorage.getItem('token')
+//const token = localStorage.getItem('token')
+
 
 const items = ref([])  
 const firstFetchedDate = ref(null)  
@@ -29,7 +35,7 @@ const fetchData = async (date) => {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        "Authorization": `Bearer ${token}`
+        "Authorization": `Bearer ${token.value}`
       },
     });
 
@@ -76,7 +82,7 @@ const countNewMessages = async () => {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        "Authorization": `Bearer ${token}`
+        "Authorization": `Bearer ${token.value}`
       },
     });
 
@@ -112,7 +118,7 @@ const loadNewMessages = async () => {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          "Authorization": `Bearer ${token}`
+          "Authorization": `Bearer ${token.value}`
         },
       });
 
